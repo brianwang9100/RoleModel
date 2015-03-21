@@ -11,5 +11,6 @@
 #import "NewModelViewController.h"
 #import "CompareModelViewController.h"
 
-@interface ModelTableViewController : UITableViewController <NewModelViewControllerDelegate>, <CompareModelViewController>
+@interface ModelTableViewController : UITableViewController <NewModelViewControllerDelegate, CompareModelViewControllerDelegate>
+-(void) addModel: (Model *) model;
 @end

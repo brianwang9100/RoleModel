@@ -12,9 +12,8 @@
     
 }
 
--(id) initWithName: (NSString*) name Description:(NSString*) description GestureArray: (NSMutableArray*) array {
+-(id) initWithName: (NSString*) name gestureArray: (NSMutableArray*) array {
     _nameOfModel = name;
-    _modelDescription = description;
     _gestureArray = array;
     
     return self;

@@ -10,6 +10,7 @@
 
 @interface Model : NSObject
 @property (strong, nonatomic) NSString *nameOfModel;
-@property (strong, nonatomic) NSString *modelDescription;
 @property (strong, nonatomic) NSMutableArray *gestureArray;
+-(id) initWithName: (NSString*) name gestureArray: (NSMutableArray*) array;
+
 @end

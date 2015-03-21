@@ -11,6 +11,9 @@
 		DFAE7CE11ABD49D100602EF8 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CE01ABD49D100602EF8 /* Model.m */; };
 		DFAE7CE41ABD571000602EF8 /* NewModelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CE31ABD571000602EF8 /* NewModelViewController.m */; };
 		DFAE7CE71ABD572300602EF8 /* CompareModelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CE61ABD572300602EF8 /* CompareModelViewController.m */; };
+		DFAE7D1E1ABD7AA900602EF8 /* MyoKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAE7D1D1ABD7AA900602EF8 /* MyoKit.framework */; };
+		DFAE7D201ABD7AD200602EF8 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAE7D1F1ABD7AD200602EF8 /* CoreBluetooth.framework */; };
+		DFAE7D221ABD7ADE00602EF8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAE7D211ABD7ADE00602EF8 /* SystemConfiguration.framework */; };
 		DFBB49FE1ABD39C4005380D4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB49FD1ABD39C4005380D4 /* main.m */; };
 		DFBB4A011ABD39C4005380D4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB4A001ABD39C4005380D4 /* AppDelegate.m */; };
 		DFBB4A041ABD39C4005380D4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB4A031ABD39C4005380D4 /* ViewController.m */; };
@@ -39,6 +42,9 @@
 		DFAE7CE31ABD571000602EF8 /* NewModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewModelViewController.m; path = ../NewModelViewController.m; sourceTree = "<group>"; };
 		DFAE7CE51ABD572300602EF8 /* CompareModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompareModelViewController.h; path = ../CompareModelViewController.h; sourceTree = "<group>"; };
 		DFAE7CE61ABD572300602EF8 /* CompareModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompareModelViewController.m; path = ../CompareModelViewController.m; sourceTree = "<group>"; };
+		DFAE7D1D1ABD7AA900602EF8 /* MyoKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = MyoKit.framework; sourceTree = "<group>"; };
+		DFAE7D1F1ABD7AD200602EF8 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
+		DFAE7D211ABD7ADE00602EF8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DFBB49F81ABD39C4005380D4 /* RoleModel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoleModel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFBB49FC1ABD39C4005380D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFBB49FD1ABD39C4005380D4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -59,6 +65,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DFAE7D221ABD7ADE00602EF8 /* SystemConfiguration.framework in Frameworks */,
+				DFAE7D201ABD7AD200602EF8 /* CoreBluetooth.framework in Frameworks */,
+				DFAE7D1E1ABD7AA900602EF8 /* MyoKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +84,9 @@
 		DFBB49EF1ABD39C4005380D4 = {
 			isa = PBXGroup;
 			children = (
+				DFAE7D211ABD7ADE00602EF8 /* SystemConfiguration.framework */,
+				DFAE7D1F1ABD7AD200602EF8 /* CoreBluetooth.framework */,
+				DFAE7D1D1ABD7AA900602EF8 /* MyoKit.framework */,
 				DFBB49FA1ABD39C4005380D4 /* RoleModel */,
 				DFBB4A141ABD39C4005380D4 /* RoleModelTests */,
 				DFBB49F91ABD39C4005380D4 /* Products */,
@@ -369,6 +381,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = RoleModel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -379,6 +395,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = RoleModel/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";

@@ -16,7 +16,9 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    NSLog(_teacher.nameOfModel);
     // Do any additional setup after loading the view.
+    
 }
 
 - (void)didReceiveMemoryWarning {

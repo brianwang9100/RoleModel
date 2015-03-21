@@ -30,12 +30,16 @@
 }
 
 -(void) setupTable {
-    if ([_defaults objectForKey:@"Models"] == nil) {
-        _modelArray = [NSMutableArray arrayWithObject:nil];
-        [self saveModels];
-    } else {
-        _modelArray = [_defaults objectForKey:@"Models"];
-    }
+//    if ([_defaults objectForKey:@"Models"] == nil) {
+//        _modelArray = [[NSMutableArray alloc] initWithObjects:nil];
+//        [self saveModels];
+//    } else {
+//        _modelArray = [_defaults objectForKey:@"Models"];
+//
+//    }
+    _modelArray = [[NSMutableArray alloc] initWithObjects:nil];
+    [_modelArray addObject: [[Model alloc] initWithName: @"BasketBall" gestureArray:[[NSMutableArray alloc] init]]];
+    [_modelArray addObject: [[Model alloc] initWithName: @"Soccer" gestureArray:[[NSMutableArray alloc] init]]];
 }
 
 -(void) saveModels {
@@ -60,10 +64,9 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-//    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-//    
-//    int selectedRow = indexPath.row;
-//    NSLog(@"touch on row %d", selectedRow);
+    int selectedRow = indexPath.row;
+    Model *teacher = [_modelArray objectAtIndex:selectedRow];
+    [self performSegueWithIdentifier:@"compareModels" sender:teacher];
 }
 
 
@@ -77,11 +80,12 @@
     }
     Model *model = [_modelArray objectAtIndex:indexPath.row];
     cell.textLabel.text = model.nameOfModel;
-    cell.detailTextLabel.text = model.modelDescription;
-    cell.accessoryType = UITableViewCellStyleSubtitle;
     return cell;
 }
 
+-(void) addModel: (Model *) model {
+    [_modelArray addObject:model];
+}
 
 /*
 // Override to support conditional editing of the table view.
@@ -130,7 +134,7 @@
         UINavigationController *navigationController = segue.destinationViewController;
         CompareModelViewController *compareModelViewController = [navigationController viewControllers][0];
         compareModelViewController.delegate = self;
-//        compareModelViewController.teacher = [_modelArray
+        compareModelViewController.teacher = (Model *)sender;
     }
 }
 
