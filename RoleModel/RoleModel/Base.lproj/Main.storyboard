@@ -158,29 +158,11 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="EdJ-56-ueN">
-                                <rect key="frame" x="15" y="477" width="288" height="30"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <state key="normal" title="Combine and Save">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="compare" destination="RJo-1N-aeM" eventType="touchUpInside" id="x0a-2R-pXR"/>
-                                    <action selector="save" destination="IG8-fM-WH6" eventType="touchUpInside" id="6Rg-Dt-1g7"/>
-                                </connections>
-                            </button>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RecordingLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UpY-vP-hdj">
-                                <rect key="frame" x="15" y="308" width="288" height="21"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Recording Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="UpY-vP-hdj">
+                                <rect key="frame" x="15" y="268" width="288" height="102"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="1" green="0.053740424250000002" blue="0.010319255919999999" alpha="1" colorSpace="calibratedRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="86.5% Accurate" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hik-AB-A1m">
-                                <rect key="frame" x="15" y="434" width="288" height="21"/>
-                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="Vjy-i5-Lb8">
@@ -190,7 +172,24 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="connectToMyo" destination="IG8-fM-WH6" eventType="touchUpInside" id="kgP-JL-iRK"/>
+                                    <action selector="connectToMyo" destination="RJo-1N-aeM" eventType="touchUpInside" id="DVF-cI-WuT"/>
+                                </connections>
+                            </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="86.5% Accurate" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="hik-AB-A1m">
+                                <rect key="frame" x="15" y="434" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="EdJ-56-ueN">
+                                <rect key="frame" x="15" y="477" width="288" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <state key="normal" title="Compare">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="compare" destination="RJo-1N-aeM" eventType="touchUpInside" id="x0a-2R-pXR"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -204,19 +203,15 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <outlet property="PercentError" destination="hik-AB-A1m" id="f1Y-hJ-7rw"/>
                         <outlet property="compareButton" destination="EdJ-56-ueN" id="yO0-RO-ZqO"/>
                         <outlet property="connectButton" destination="Vjy-i5-Lb8" id="4qG-SH-Gdp"/>
-                        <outlet property="percentError" destination="hik-AB-A1m" id="FbU-ry-TfT"/>
                         <outlet property="recordLabel" destination="UpY-vP-hdj" id="1VB-md-qlV"/>
-                        <outlet property="sampleSizeLabel" destination="hik-AB-A1m" id="xYg-Pb-BVO"/>
-                        <outlet property="saveButton" destination="EdJ-56-ueN" id="3yG-aV-piS"/>
                         <outlet property="syncAndLockLabel" destination="QnT-fT-Gjm" id="v3v-U1-uAX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="xo7-KX-BQi" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1241" y="632"/>
+            <point key="canvasLocation" x="1241" y="640"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YYu-TF-O5h">

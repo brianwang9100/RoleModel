@@ -105,22 +105,18 @@
 
 - (void)didUnlockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Unlocked";
-    if (_currentModel != nil) {
-        _recordLabel.text = @"Press send to test your accuracy";
-    } else {
-        _percentError.hidden = TRUE;
-        _recordLabel.text = @"Recording!";
-        _recording = true;
-        _initialDate = [NSDate date];
-        _currentModel = [NSMutableArray arrayWithCapacity:300];
-    }
+
+    _percentError.hidden = TRUE;
+    _recordLabel.text = @"Recording!";
+    _recording = true;
+    _initialDate = [NSDate date];
+    _currentModel = [NSMutableArray arrayWithCapacity:300];
 }
 
 - (void)didLockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Locked";
-    _recordLabel.text = @"Recording Stopped";
     _recording = false;
-    _recordLabel.text = @"Press send to test your accuracy";
+    _recordLabel.text = @"Stopped. Press compare to test accuracy";
     _compareButton.hidden = FALSE;
     
 }
@@ -165,7 +161,6 @@
     NSDate *currentDate = [NSDate date];
     NSTimeInterval executionTime = [currentDate timeIntervalSinceDate: _initialDate];
     int index = (int)(executionTime/.01);
-    NSLog(@"%d", index);
     
     if (_recording && index < 299) {
         
@@ -178,7 +173,6 @@
         TLMEulerAngles *angles = [TLMEulerAngles anglesWithQuaternion:orientationEvent.quaternion];
         
         while ([_currentModel count] < index) {
-            NSLog(@"addedSpaceHolders");
             [self addGestureTimeStamp];
         }
         
@@ -221,8 +215,6 @@
             [pose.myo lock];
         } else {
             [self addGestureTimeStamp];
-            NSLog(@"addedNewGesture");
-            
         }
     }
 }
@@ -243,11 +235,41 @@
 
 -(IBAction) compare {
     
+    NSMutableArray *superArray = [NSMutableArray arrayWithObjects:_currentModel,_teacher.gestureArray, nil];
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:superArray options:0 error:nil];
+    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSASCIIStringEncoding];
+    NSString *postLength = [NSString stringWithFormat:@"%d", [jsonString length]];
+    
+    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://127.0.0.1:9875/gatherData"]];
+    [request setHTTPMethod:@"POST"];
+    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
+    [request setHTTPBody:jsonData];
+    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+//        double d = 0;
+//        memcpy(&d, [data bytes], sizeof(d));
+//        NSLog(@"%.2f", d);
+//        [self displayPercentage: d];
+        
+    }];
+}
+
+-(void) displayPercentage:(double) percent {
+    _percentError.hidden = FALSE;
+    _percentError.text = [NSString stringWithFormat:@"%.2f", percent];
 }
 
 -(IBAction) close {
     [self.delegate compareModelViewControllerDidClose:self];
 }
+
+-(IBAction) connectToMyo {
+    // Note that when the settings view controller is presented to the user, it must be in a UINavigationController.
+    UINavigationController *controller = [TLMSettingsViewController settingsInNavigationController];
+    // Present the settings view controller modally.
+    [self presentViewController:controller animated:YES completion:nil];
+}
+
 
 /*
 #pragma mark - Navigation

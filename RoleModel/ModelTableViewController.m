@@ -127,6 +127,7 @@
         UINavigationController *navigationController = segue.destinationViewController;
         NewModelViewController *newModelViewController = [navigationController viewControllers][0];
         newModelViewController.delegate = self;
+        
     } else if ([segue.identifier isEqualToString:@"compareModels"]) {
         
         UINavigationController *navigationController = segue.destinationViewController;
