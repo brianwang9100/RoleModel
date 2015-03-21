@@ -14,13 +14,22 @@
 @end
 
 @implementation NewModelViewController {
-    
+    BOOL _recording;
+    NSDate *_initialDate;
+    NSMutableArray *_modelHolder;
+    NSMutableArray *_currentModel;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _recordLabel.text = @"";
+    _syncAndLockLabel.text = @"";
     
+    _recording = false;
+
+    
+    _modelHolder = [[NSMutableArray alloc] initWithCapacity:5];
     
     // Data notifications are received through NSNotificationCenter.
     // Posted whenever a TLMMyo connects
@@ -78,38 +87,69 @@
 
 - (void)didConnectDevice:(NSNotification *)notification {
     _connectButton.hidden = TRUE;
-    _connectButton.enabled = FALSE;
-    _recordButton.hidden = FALSE;
-    _recordButton.enabled = TRUE;
+    _recordLabel.hidden = FALSE;
+    _recordLabel.text = @"Myo not Synced";
+    _sampleSizeLabel.hidden = FALSE;
+    _syncAndLockLabel.text = @"Perform Sync Gesture";
+
+    
 }
 
 - (void)didDisconnectDevice:(NSNotification *)notification {
     _connectButton.hidden = FALSE;
-    _connectButton.enabled = TRUE;
-    _recordButton.hidden = TRUE;
-    _recordButton.enabled = FALSE;
+    _recordLabel.hidden = TRUE;
+    _recordLabel.text = @"";
+    _sampleSizeLabel.hidden = TRUE;
+    _syncAndLockLabel.text = @"";
+
 }
 
 - (void)didUnlockDevice:(NSNotification *)notification {
+    _syncAndLockLabel.text = @"Unlocked";
+    if ([_modelHolder count] >= 5) {
+        _recordLabel.text = @"Max number of samples reached";
+    } else {
+        _recordLabel.text = @"Recording!";
+        _recording = true;
+        _initialDate = [NSDate date];
+        _currentModel = [[NSMutableArray alloc] initWithCapacity: 300];
+    }
     
+
 }
 
 - (void)didLockDevice:(NSNotification *)notification {
+    _syncAndLockLabel.text = @"Locked";
+    _recordLabel.text = @"Recording Stopped";
+    _recording = false;
+    if ([_modelHolder count] < 5) {
+        [_modelHolder addObject:_currentModel];
+
+    }
+    if ([_modelHolder count] >= 5) {
+        _recordLabel.text = @"Max number of samples reached";
+        _saveButton.hidden = FALSE;
+    }
     
+    _sampleSizeLabel.text = [NSString stringWithFormat:@"Sample Size: %i", [_modelHolder count]];
+
+
 }
 
 - (void)didSyncArm:(NSNotification *)notification {
     // Retrieve the arm event from the notification's userInfo with the kTLMKeyArmSyncEvent key.
-    TLMArmSyncEvent *armEvent = notification.userInfo[kTLMKeyArmSyncEvent];
-    
-    // Update the armLabel with arm information.
-    NSString *armString = armEvent.arm == TLMArmRight ? @"Right" : @"Left";
-    NSString *directionString = armEvent.xDirection == TLMArmXDirectionTowardWrist ? @"Toward Wrist" : @"Toward Elbow";
+    _recordLabel.text = @"Unlock myo to begin recording";
+    _syncAndLockLabel.text = @"Locked";
+
 }
 
 - (void)didUnsyncArm:(NSNotification *)notification {
-    
+    _recordLabel.text = @"Myo not Synced";
+    _syncAndLockLabel.text = @"Perform Sync Gesture";
 }
+
+
+#pragma mark - Updates
 
 - (void)didReceiveOrientationEvent:(NSNotification *)notification {
     // Retrieve the orientation from the NSNotification's userInfo with the kTLMKeyOrientationEvent key.
@@ -175,15 +215,17 @@
     }
 }
 
+#pragma mark - IBActions
+
+-(IBAction) save {
+    
+}
+
 -(IBAction) connectToMyo {
     // Note that when the settings view controller is presented to the user, it must be in a UINavigationController.
     UINavigationController *controller = [TLMSettingsViewController settingsInNavigationController];
     // Present the settings view controller modally.
     [self presentViewController:controller animated:YES completion:nil];
-}
-
--(IBAction) record {
-    
 }
 
 -(IBAction) close {

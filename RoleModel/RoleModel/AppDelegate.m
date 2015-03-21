@@ -19,7 +19,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [TLMHub sharedHub];
+    [[TLMHub sharedHub] setApplicationIdentifier:@"com.bigwangsmash.RoleModel"];
     return YES;
 }
 

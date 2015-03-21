@@ -65,7 +65,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="5LZ-Jz-Jdu">
-                                <rect key="frame" x="104" y="269" width="112" height="30"/>
+                                <rect key="frame" x="16" y="314" width="288" height="30"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                 <state key="normal" title="Connect">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -74,13 +74,37 @@
                                     <action selector="connectToMyo" destination="IG8-fM-WH6" eventType="touchUpInside" id="ah1-cU-Hfw"/>
                                 </connections>
                             </button>
-                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="phT-LV-v63">
-                                <rect key="frame" x="104" y="269" width="112" height="30"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SyncAndLockLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="LFd-g9-nIN">
+                                <rect key="frame" x="16" y="415" width="288" height="21"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                                <state key="normal" title="Record">
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="middleTruncation" id="l2N-ua-Y9b">
+                                <rect key="frame" x="16" y="487" width="288" height="30"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <state key="normal" title="Combine and Save">
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <connections>
+                                    <action selector="save" destination="IG8-fM-WH6" eventType="touchUpInside" id="bOU-f4-5Vu"/>
+                                </connections>
                             </button>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="RecordingLabel" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="vC1-Dv-KUr">
+                                <rect key="frame" x="16" y="318" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="1" green="0.053740424250000002" blue="0.010319255919999999" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sample Size: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="P5D-Km-BFM">
+                                <rect key="frame" x="16" y="444" width="288" height="21"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
@@ -93,7 +117,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="connectButton" destination="5LZ-Jz-Jdu" id="vMh-NA-mBC"/>
-                        <outlet property="recordButton" destination="phT-LV-v63" id="ciC-9J-ZMC"/>
+                        <outlet property="recordLabel" destination="vC1-Dv-KUr" id="XbW-zp-YJO"/>
+                        <outlet property="sampleSizeLabel" destination="P5D-Km-BFM" id="gej-2U-C6a"/>
+                        <outlet property="saveButton" destination="l2N-ua-Y9b" id="B5N-lg-hbR"/>
+                        <outlet property="syncAndLockLabel" destination="LFd-g9-nIN" id="k2Z-L9-9xM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XJo-ej-EvP" userLabel="First Responder" sceneMemberID="firstResponder"/>
