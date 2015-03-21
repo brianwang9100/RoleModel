@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DFAE7CDB1ABD442600602EF8 /* ModelTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CDA1ABD442600602EF8 /* ModelTableViewController.m */; };
+		DFAE7CE11ABD49D100602EF8 /* Model.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CE01ABD49D100602EF8 /* Model.m */; };
+		DFAE7CE41ABD571000602EF8 /* NewModelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CE31ABD571000602EF8 /* NewModelViewController.m */; };
+		DFAE7CE71ABD572300602EF8 /* CompareModelViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFAE7CE61ABD572300602EF8 /* CompareModelViewController.m */; };
 		DFBB49FE1ABD39C4005380D4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB49FD1ABD39C4005380D4 /* main.m */; };
 		DFBB4A011ABD39C4005380D4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB4A001ABD39C4005380D4 /* AppDelegate.m */; };
 		DFBB4A041ABD39C4005380D4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB4A031ABD39C4005380D4 /* ViewController.m */; };
@@ -27,6 +31,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		DFAE7CD91ABD442600602EF8 /* ModelTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ModelTableViewController.h; path = ../ModelTableViewController.h; sourceTree = "<group>"; };
+		DFAE7CDA1ABD442600602EF8 /* ModelTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ModelTableViewController.m; path = ../ModelTableViewController.m; sourceTree = "<group>"; };
+		DFAE7CDF1ABD49D100602EF8 /* Model.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Model.h; path = ../Model.h; sourceTree = "<group>"; };
+		DFAE7CE01ABD49D100602EF8 /* Model.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Model.m; path = ../Model.m; sourceTree = "<group>"; };
+		DFAE7CE21ABD571000602EF8 /* NewModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = NewModelViewController.h; path = ../NewModelViewController.h; sourceTree = "<group>"; };
+		DFAE7CE31ABD571000602EF8 /* NewModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NewModelViewController.m; path = ../NewModelViewController.m; sourceTree = "<group>"; };
+		DFAE7CE51ABD572300602EF8 /* CompareModelViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CompareModelViewController.h; path = ../CompareModelViewController.h; sourceTree = "<group>"; };
+		DFAE7CE61ABD572300602EF8 /* CompareModelViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CompareModelViewController.m; path = ../CompareModelViewController.m; sourceTree = "<group>"; };
 		DFBB49F81ABD39C4005380D4 /* RoleModel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoleModel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFBB49FC1ABD39C4005380D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFBB49FD1ABD39C4005380D4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -88,6 +100,14 @@
 				DFBB4A051ABD39C4005380D4 /* Main.storyboard */,
 				DFBB4A081ABD39C4005380D4 /* Images.xcassets */,
 				DFBB4A0A1ABD39C4005380D4 /* LaunchScreen.xib */,
+				DFAE7CD91ABD442600602EF8 /* ModelTableViewController.h */,
+				DFAE7CDA1ABD442600602EF8 /* ModelTableViewController.m */,
+				DFAE7CE51ABD572300602EF8 /* CompareModelViewController.h */,
+				DFAE7CE61ABD572300602EF8 /* CompareModelViewController.m */,
+				DFAE7CE21ABD571000602EF8 /* NewModelViewController.h */,
+				DFAE7CE31ABD571000602EF8 /* NewModelViewController.m */,
+				DFAE7CDF1ABD49D100602EF8 /* Model.h */,
+				DFAE7CE01ABD49D100602EF8 /* Model.m */,
 				DFBB49FB1ABD39C4005380D4 /* Supporting Files */,
 			);
 			path = RoleModel;
@@ -220,6 +240,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFBB4A041ABD39C4005380D4 /* ViewController.m in Sources */,
+				DFAE7CDB1ABD442600602EF8 /* ModelTableViewController.m in Sources */,
+				DFAE7CE11ABD49D100602EF8 /* Model.m in Sources */,
+				DFAE7CE41ABD571000602EF8 /* NewModelViewController.m in Sources */,
+				DFAE7CE71ABD572300602EF8 /* CompareModelViewController.m in Sources */,
 				DFBB4A011ABD39C4005380D4 /* AppDelegate.m in Sources */,
 				DFBB49FE1ABD39C4005380D4 /* main.m in Sources */,
 			);
@@ -414,6 +438,7 @@
 				DFBB4A1D1ABD39C4005380D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		DFBB4A1E1ABD39C4005380D4 /* Build configuration list for PBXNativeTarget "RoleModelTests" */ = {
 			isa = XCConfigurationList;
@@ -422,6 +447,7 @@
 				DFBB4A201ABD39C4005380D4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
