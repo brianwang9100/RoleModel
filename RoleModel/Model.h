@@ -12,5 +12,7 @@
 @property (strong, nonatomic) NSString *nameOfModel;
 @property (strong, nonatomic) NSMutableArray *gestureArray;
 -(id) initWithName: (NSString*) name gestureArray: (NSMutableArray*) array;
+- (void) encodeWithCoder : (NSCoder *)encode ;
+- (id) initWithCoder : (NSCoder *)decode;
 
 @end

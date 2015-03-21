@@ -21,12 +21,8 @@
     [super viewDidLoad];
     _defaults = [NSUserDefaults standardUserDefaults];
     if ([_defaults objectForKey:@"Models"] != nil) {
-        _modelArray = [_defaults objectForKey:@"Models"];
-    } else {
-        _modelArray = [NSMutableArray array];
-        [self saveModels];
+        _modelArray = [self readArrayFromUserDefaults:@"Models"];
     }
-    
     [self setupTable];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -41,8 +37,7 @@
 }
 
 -(void) saveModels {
-    [_defaults setObject:_modelArray forKey:@"Models"];
-    [_defaults synchronize];
+    [self writeArrayToUserDefaults:@"Models" withArray:_modelArray];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -82,7 +77,11 @@
 }
 
 -(void) addModel: (Model *) model {
-    [_modelArray addObject:model];
+    if (_modelArray == nil || [_modelArray count] == 0) {
+        _modelArray = [NSMutableArray arrayWithObject:model];
+    } else {
+        [_modelArray addObject:model];
+    }
     [self saveModels];
 }
 
@@ -152,5 +151,21 @@
 
 }
 
+#pragma mark - ENCODERS
+-(void)writeArrayToUserDefaults:(NSString *)keyName withArray:(NSMutableArray *)myArray
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:myArray];
+    [defaults setObject:data forKey:keyName];
+    [defaults synchronize];
+}
 
+-(NSMutableArray *)readArrayFromUserDefaults:(NSString*)keyName
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSData *data = [defaults objectForKey:keyName];
+    NSMutableArray *myArray = [NSKeyedUnarchiver unarchiveObjectWithData:data];
+    [defaults synchronize];
+    return myArray;
+}
 @end

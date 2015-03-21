@@ -19,4 +19,21 @@
     return self;
 }
 
+- (void)encodeWithCoder:(NSCoder *)coder;
+{
+    [coder encodeObject:_gestureArray forKey:@"gestureArray"];
+    [coder encodeObject: _nameOfModel forKey:@"name"];
+}
+
+- (id)initWithCoder:(NSCoder *)coder;
+{
+    self = [super init];
+    if (self != nil)
+    {
+        _gestureArray = [coder decodeObjectForKey:@"gestureArray"];
+        _nameOfModel = [coder decodeObjectForKey:@"name"];
+    }
+    return self;
+}
+
 @end

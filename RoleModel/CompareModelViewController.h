@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <MyoKit/MyoKit.h>
 #import "Model.h"
 
 @class CompareModelViewController;
@@ -21,5 +22,14 @@
 @property (weak, nonatomic) id <CompareModelViewControllerDelegate> delegate;
 @property (strong, nonatomic) Model *student;
 @property (strong, nonatomic) Model *teacher;
+
+@property (strong, nonatomic) IBOutlet UIButton *connectButton;
+@property (strong, nonatomic) IBOutlet UILabel *recordLabel;
+@property (strong, nonatomic) IBOutlet UIButton *compareButton;
+
+@property (strong, nonatomic) IBOutlet UILabel *syncAndLockLabel;
+@property (strong, nonatomic) IBOutlet UILabel *percentError;
+
+-(IBAction) compare;
 -(IBAction) close;
 @end
