@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 #import "Model.h"
+#import "NewModelViewController.h"
+#import "CompareModelViewController.h"
 
-@interface ModelTableViewController : UITableViewController
+@interface ModelTableViewController : UITableViewController <NewModelViewControllerDelegate>, <CompareModelViewController>
 @end

@@ -32,6 +32,7 @@
 -(void) setupTable {
     if ([_defaults objectForKey:@"Models"] == nil) {
         _modelArray = [NSMutableArray arrayWithObject:nil];
+        [self saveModels];
     } else {
         _modelArray = [_defaults objectForKey:@"Models"];
     }
@@ -119,8 +120,33 @@
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+    if ([segue.identifier isEqualToString:@"addModel"]) {
+        
+        UINavigationController *navigationController = segue.destinationViewController;
+        NewModelViewController *newModelViewController = [navigationController viewControllers][0];
+        newModelViewController.delegate = self;
+    } else if ([segue.identifier isEqualToString:@"compareModels"]) {
+        
+        UINavigationController *navigationController = segue.destinationViewController;
+        CompareModelViewController *compareModelViewController = [navigationController viewControllers][0];
+        compareModelViewController.delegate = self;
+//        compareModelViewController.teacher = [_modelArray
+    }
+}
+
+#pragma mark - PlayerDetailsViewControllerDelegate
+
+- (void)newModelViewControllerDidClose:(NewModelViewController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView reloadData];
+}
+
+- (void)compareModelViewControllerDidClose:(CompareModelViewController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+    [self.tableView reloadData];
+
 }
 
 

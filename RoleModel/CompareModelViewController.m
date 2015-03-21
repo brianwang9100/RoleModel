@@ -24,6 +24,10 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(IBAction) close {
+    [self.delegate compareModelViewControllerDidClose:self];
+}
+
 /*
 #pragma mark - Navigation
 

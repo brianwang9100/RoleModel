@@ -24,6 +24,9 @@
     // Dispose of any resources that can be recreated.
 }
 
+-(IBAction) close {
+    [self.delegate newModelViewControllerDidClose:self];
+}
 /*
 #pragma mark - Navigation
 
