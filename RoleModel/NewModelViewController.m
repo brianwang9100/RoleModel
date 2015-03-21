@@ -8,7 +8,7 @@
 
 #import "NewModelViewController.h"
 #import <MyoKit/MyoKit.h>
-
+static int MAX_MODELS = 1;
 @interface NewModelViewController ()
 
 @end
@@ -18,6 +18,15 @@
     NSDate *_initialDate;
     NSMutableArray *_modelHolder;
     NSMutableArray *_currentModel;
+    
+    NSString *_poseString;
+    double _roll;
+    double _pitch;
+    double _yaw;
+    double _aX;
+    double _aY;
+    double _aZ;
+
 }
 
 - (void)viewDidLoad {
@@ -106,27 +115,25 @@
 
 - (void)didUnlockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Unlocked";
-    if ([_modelHolder count] >= 5) {
+    if ([_modelHolder count] >= MAX_MODELS) {
         _recordLabel.text = @"Max number of samples reached";
     } else {
         _recordLabel.text = @"Recording!";
         _recording = true;
         _initialDate = [NSDate date];
-        _currentModel = [[NSMutableArray alloc] initWithCapacity: 300];
+        _currentModel = [NSMutableArray arrayWithCapacity:300];
     }
-    
-
 }
 
 - (void)didLockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Locked";
     _recordLabel.text = @"Recording Stopped";
     _recording = false;
-    if ([_modelHolder count] < 5) {
+    if ([_modelHolder count] < MAX_MODELS) {
         [_modelHolder addObject:_currentModel];
 
     }
-    if ([_modelHolder count] >= 5) {
+    if ([_modelHolder count] >= MAX_MODELS) {
         _recordLabel.text = @"Max number of samples reached";
         _saveButton.hidden = FALSE;
     }
@@ -150,57 +157,14 @@
 
 
 #pragma mark - Updates
-
 - (void)didReceiveOrientationEvent:(NSNotification *)notification {
-    // Retrieve the orientation from the NSNotification's userInfo with the kTLMKeyOrientationEvent key.
-    TLMOrientationEvent *orientationEvent = notification.userInfo[kTLMKeyOrientationEvent];
-    
-    // Create Euler angles from the quaternion of the orientation.
-    TLMEulerAngles *angles = [TLMEulerAngles anglesWithQuaternion:orientationEvent.quaternion];
-    
-    // Next, we want to apply a rotation and perspective transformation based on the pitch, yaw, and roll.
-    CATransform3D rotationAndPerspectiveTransform = CATransform3DConcat(CATransform3DConcat(CATransform3DRotate (CATransform3DIdentity, angles.pitch.radians, -1.0, 0.0, 0.0), CATransform3DRotate(CATransform3DIdentity, angles.yaw.radians, 0.0, 1.0, 0.0)), CATransform3DRotate(CATransform3DIdentity, angles.roll.radians, 0.0, 0.0, -1.0));
-    
-}
 
-- (void)didReceiveAccelerometerEvent:(NSNotification *)notification {
-    // Retrieve the accelerometer event from the NSNotification's userInfo with the kTLMKeyAccelerometerEvent.
-    TLMAccelerometerEvent *accelerometerEvent = notification.userInfo[kTLMKeyAccelerometerEvent];
-    
-    // Get the acceleration vector from the accelerometer event.
-    TLMVector3 accelerationVector = accelerometerEvent.vector;
-    
-    // Calculate the magnitude of the acceleration vector.
-    float magnitude = TLMVector3Length(accelerationVector);
-    
-    /* Note you can also access the x, y, z values of the acceleration (in G's) like below
-     float x = accelerationVector.x;
-     float y = accelerationVector.y;
-     float z = accelerationVector.z;
-     */
 }
 
 - (void)didReceivePoseChange:(NSNotification *)notification {
     // Retrieve the pose from the NSNotification's userInfo with the kTLMKeyPose key.
+    
     TLMPose *pose = notification.userInfo[kTLMKeyPose];
-    self.currentPose = pose;
-    
-    // Handle the cases of the TLMPoseType enumeration, and change the color of helloLabel based on the pose we receive.
-    switch (pose.type) {
-        case TLMPoseTypeUnknown:
-        case TLMPoseTypeRest:
-        case TLMPoseTypeDoubleTap:
-            break;
-        case TLMPoseTypeFist:
-            break;
-        case TLMPoseTypeWaveIn:
-            break;
-        case TLMPoseTypeWaveOut:
-            break;
-        case TLMPoseTypeFingersSpread:
-            break;
-    }
-    
     // Unlock the Myo whenever we receive a pose
     if (pose.type == TLMPoseTypeUnknown || pose.type == TLMPoseTypeRest) {
         // Causes the Myo to lock after a short period.
@@ -215,10 +179,102 @@
     }
 }
 
+- (void)didReceiveAccelerometerEvent:(NSNotification *)notification {
+    NSDate *currentDate = [NSDate date];
+    NSTimeInterval executionTime = [currentDate timeIntervalSinceDate: _initialDate];
+    int index = (int)(executionTime/.01);
+    NSLog(@"%d", index);
+    
+    if (_recording && index < 299) {
+    
+        // Retrieve the accelerometer event from the NSNotification's userInfo with the kTLMKeyAccelerometerEvent.
+        TLMAccelerometerEvent *accelerometerEvent = notification.userInfo[kTLMKeyAccelerometerEvent];
+        TLMOrientationEvent *orientationEvent = accelerometerEvent.myo.orientation;
+        TLMPose* pose = accelerometerEvent.myo.pose;
+        
+        TLMVector3 accelerationVector = accelerometerEvent.vector;
+        TLMEulerAngles *angles = [TLMEulerAngles anglesWithQuaternion:orientationEvent.quaternion];
+        
+        while ([_currentModel count] < index) {
+            NSLog(@"addedSpaceHolders");
+            [self addGestureTimeStamp];
+        }
+        
+        _roll = angles.roll.radians;
+        _pitch = angles.pitch.radians;
+        _yaw = angles.yaw.radians;
+        
+        _aX = accelerationVector.x;
+        _aY = accelerationVector.y;
+        _aX = accelerationVector.z;
+
+        
+        switch (pose.type) {
+            case TLMPoseTypeUnknown:
+                _poseString = @"Unknown";
+                break;
+            case TLMPoseTypeRest:
+                _poseString = @"Unknown";
+                break;
+            case TLMPoseTypeDoubleTap:
+                _poseString = @"Unknown";
+                break;
+            case TLMPoseTypeFist:
+                _poseString = @"Fist";
+                break;
+            case TLMPoseTypeWaveIn:
+                _poseString = @"WaveIn";
+                break;
+            case TLMPoseTypeWaveOut:
+                _poseString = @"WaveOut";
+                break;
+            case TLMPoseTypeFingersSpread:
+                _poseString = @"FingersSpread";
+                break;
+        }
+        
+        if (index >= 299) {
+            _recording = FALSE;
+            _recordLabel.text = @"Time Limit Reached";
+            [pose.myo lock];
+        } else {
+            [self addGestureTimeStamp];
+            NSLog(@"addedNewGesture");
+
+        }
+    }
+}
+
+#pragma mark - MISC Functions
+-(void) addGestureTimeStamp {
+    NSMutableDictionary *dict = [NSMutableDictionary dictionary];
+    [dict setValue:[NSNumber numberWithDouble:_roll] forKey:@"roll"];
+    [dict setValue:[NSNumber numberWithDouble:_pitch] forKey:@"pitch"];
+    [dict setValue:[NSNumber numberWithDouble:_yaw] forKey:@"yaw"];
+    [dict setValue:[NSNumber numberWithDouble:_aX] forKey:@"accelerationX"];
+    [dict setValue:[NSNumber numberWithDouble:_aY] forKey:@"accelerationY"];
+    [dict setValue:[NSNumber numberWithDouble:_aZ] forKey:@"accelerationZ"];
+    [dict setValue: _poseString forKey:@"gesture"];
+    
+    [_currentModel addObject:dict];
+}
+
+
+-(void) post {
+    
+}
+
+-(void) get {
+    
+}
+
 #pragma mark - IBActions
 
 -(IBAction) save {
+    Model* temp = [[Model alloc] initWithName:@"LOL" gestureArray:[_modelHolder objectAtIndex:0]];
     
+    [self.delegate addModel: temp];
+    [self.delegate newModelViewControllerDidClose:self];
 }
 
 -(IBAction) connectToMyo {
@@ -231,14 +287,7 @@
 -(IBAction) close {
     [self.delegate newModelViewControllerDidClose:self];
 }
-/*
-#pragma mark - Navigation
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+
 
 @end

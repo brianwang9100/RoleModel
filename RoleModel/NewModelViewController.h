@@ -29,7 +29,6 @@
 
 
 
-@property (strong, nonatomic) TLMPose *currentPose;
 
 -(IBAction) close;
 

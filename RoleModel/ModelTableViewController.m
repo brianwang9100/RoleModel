@@ -20,6 +20,13 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     _defaults = [NSUserDefaults standardUserDefaults];
+    if ([_defaults objectForKey:@"Models"] != nil) {
+        _modelArray = [_defaults objectForKey:@"Models"];
+    } else {
+        _modelArray = [NSMutableArray array];
+        [self saveModels];
+    }
+    
     [self setupTable];
     
     // Uncomment the following line to preserve selection between presentations.
@@ -30,16 +37,7 @@
 }
 
 -(void) setupTable {
-//    if ([_defaults objectForKey:@"Models"] == nil) {
-//        _modelArray = [[NSMutableArray alloc] initWithObjects:nil];
-//        [self saveModels];
-//    } else {
-//        _modelArray = [_defaults objectForKey:@"Models"];
-//
-//    }
-    _modelArray = [[NSMutableArray alloc] initWithObjects:nil];
-    [_modelArray addObject: [[Model alloc] initWithName: @"BasketBall" gestureArray:[[NSMutableArray alloc] init]]];
-    [_modelArray addObject: [[Model alloc] initWithName: @"Soccer" gestureArray:[[NSMutableArray alloc] init]]];
+    
 }
 
 -(void) saveModels {
@@ -85,6 +83,7 @@
 
 -(void) addModel: (Model *) model {
     [_modelArray addObject:model];
+    [self saveModels];
 }
 
 /*
