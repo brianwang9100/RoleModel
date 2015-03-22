@@ -24,14 +24,15 @@
     double _aX;
     double _aY;
     double _aZ;
+    TLMMyo *_myo;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _recordLabel.text = @"";
     _syncAndLockLabel.text = @"";
     
     _recording = false;
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(didConnectDevice:)
@@ -88,8 +89,8 @@
 
 - (void)didConnectDevice:(NSNotification *)notification {
     _connectButton.hidden = TRUE;
-    _recordLabel.hidden = FALSE;
-    _recordLabel.text = @"Myo not Synced";
+    _recordButton.hidden = FALSE;
+    [_recordButton addTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
     _syncAndLockLabel.text = @"Perform Sync Gesture";
     
     
@@ -97,39 +98,60 @@
 
 - (void)didDisconnectDevice:(NSNotification *)notification {
     _connectButton.hidden = FALSE;
-    _recordLabel.hidden = TRUE;
-    _recordLabel.text = @"";
+    _recordButton.hidden = TRUE;
     _syncAndLockLabel.text = @"";
     
 }
 
 - (void)didUnlockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Unlocked";
-
-    _percentError.hidden = TRUE;
-    _recordLabel.text = @"Recording!";
-    _recording = true;
-    _initialDate = [NSDate date];
-    _currentModel = [NSMutableArray arrayWithCapacity:300];
 }
 
 - (void)didLockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Locked";
-    _recording = false;
-    _recordLabel.text = @"Stopped. Press compare to test accuracy";
-    _compareButton.hidden = FALSE;
     
+}
+
+-(void) startRecording {
+
+    _initialDate = [NSDate date];
+    _currentModel = [NSMutableArray arrayWithCapacity:300];
+    _recording = TRUE;
+    
+    _recordButton.selected = TRUE;
+    [_recordButton setTitle:@"Recording!" forState:UIControlStateNormal];
+    [_recordButton setTitle:@"Recording!" forState:UIControlStateSelected];
+    [_recordButton setTitle:@"Recording!" forState:UIControlStateDisabled];
+    [_recordButton removeTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
+    [_recordButton addTarget:self action:@selector(endRecording) forControlEvents:UIControlEventTouchUpInside];
+    _percentError.hidden = TRUE;
+    _syncAndLockLabel.text = @"Unlocked";
+    
+    [_myo unlockWithType:TLMUnlockTypeHold];
+}
+
+-(void) endRecording {
+    
+    _recording = FALSE;
+    
+    _recordButton.selected = FALSE;
+    [_recordButton setTitle:@"Record Again?" forState:UIControlStateNormal];
+    [_recordButton setTitle:@"Record Again?" forState:UIControlStateSelected];
+    [_recordButton setTitle:@"Record Again?" forState:UIControlStateDisabled];
+    [_recordButton removeTarget:self action:@selector(endRecording) forControlEvents:UIControlEventTouchUpInside];
+    [_recordButton addTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
+    _compareButton.hidden = FALSE;
+    _syncAndLockLabel.text = @"Locked";
+    [_myo lock];
 }
 
 - (void)didSyncArm:(NSNotification *)notification {
     // Retrieve the arm event from the notification's userInfo with the kTLMKeyArmSyncEvent key.
-    _recordLabel.text = @"Unlock myo to begin recording";
     _syncAndLockLabel.text = @"Locked";
     
 }
 
 - (void)didUnsyncArm:(NSNotification *)notification {
-    _recordLabel.text = @"Myo not Synced";
     _syncAndLockLabel.text = @"Perform Sync Gesture";
 }
 
@@ -140,21 +162,21 @@
 }
 
 - (void)didReceivePoseChange:(NSNotification *)notification {
-    // Retrieve the pose from the NSNotification's userInfo with the kTLMKeyPose key.
-    
+//    // Retrieve the pose from the NSNotification's userInfo with the kTLMKeyPose key.
+//    
     TLMPose *pose = notification.userInfo[kTLMKeyPose];
-    // Unlock the Myo whenever we receive a pose
-    if (pose.type == TLMPoseTypeUnknown || pose.type == TLMPoseTypeRest) {
-        // Causes the Myo to lock after a short period.
-        [pose.myo unlockWithType:TLMUnlockTypeTimed];
-    } else {
+//    // Unlock the Myo whenever we receive a pose
+//    if (pose.type == TLMPoseTypeUnknown || pose.type == TLMPoseTypeRest) {
+//        // Causes the Myo to lock after a short period.
+//        [pose.myo unlockWithType:TLMUnlockTypeTimed];
+//    } else {
         // Keeps the Myo unlocked until specified.
         // This is required to keep Myo unlocked while holding a pose, but if a pose is not being held, use
         // TLMUnlockTypeTimed to restart the timer.
         [pose.myo unlockWithType:TLMUnlockTypeHold];
         // Indicates that a user action has been performed.
         [pose.myo indicateUserAction];
-    }
+//    }
 }
 
 - (void)didReceiveAccelerometerEvent:(NSNotification *)notification {
@@ -162,12 +184,14 @@
     NSTimeInterval executionTime = [currentDate timeIntervalSinceDate: _initialDate];
     int index = (int)(executionTime/.01);
     
+    TLMAccelerometerEvent *accelerometerEvent = notification.userInfo[kTLMKeyAccelerometerEvent];
+    TLMOrientationEvent *orientationEvent = accelerometerEvent.myo.orientation;
+    TLMPose* pose = accelerometerEvent.myo.pose;
+    _myo = accelerometerEvent.myo;
+    
     if (_recording && index < 299) {
         
         // Retrieve the accelerometer event from the NSNotification's userInfo with the kTLMKeyAccelerometerEvent.
-        TLMAccelerometerEvent *accelerometerEvent = notification.userInfo[kTLMKeyAccelerometerEvent];
-        TLMOrientationEvent *orientationEvent = accelerometerEvent.myo.orientation;
-        TLMPose* pose = accelerometerEvent.myo.pose;
         
         TLMVector3 accelerationVector = accelerometerEvent.vector;
         TLMEulerAngles *angles = [TLMEulerAngles anglesWithQuaternion:orientationEvent.quaternion];
@@ -182,7 +206,7 @@
         
         _aX = accelerationVector.x;
         _aY = accelerationVector.y;
-        _aX = accelerationVector.z;
+        _aZ = accelerationVector.z;
         
         
         switch (pose.type) {
@@ -210,9 +234,7 @@
         }
         
         if (index >= 299) {
-            _recording = FALSE;
-            _recordLabel.text = @"Time Limit Reached";
-            [pose.myo lock];
+            [self endRecording];
         } else {
             [self addGestureTimeStamp];
         }
@@ -234,27 +256,96 @@
 }
 
 -(IBAction) compare {
+    [self displayPercentage:[self compareStudent:_currentModel withTeacher:_teacher.gestureArray]];
+//    NSMutableArray *superArray = [NSMutableArray arrayWithObjects:_currentModel,_teacher.gestureArray, nil];
+//    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:superArray options:0 error:nil];
+//    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSASCIIStringEncoding];
+//    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://172.56.29.74:5001/gatherData"]];
+//    [request setHTTPMethod:@"POST"];
+//    [request setHTTPBody:jsonData];
+//    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
+//    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
+//        NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+//        double d = [string doubleValue];
+//        [self displayPercentage:d];
+//    }];
+}
+
+-(double) compareStudent:(NSMutableArray*) student withTeacher: (NSMutableArray*) teacher {
+    int sInitial = 0;
+    NSMutableDictionary *studentInitialDict = [student objectAtIndex:0];
+    NSString *studentInitialPose = [studentInitialDict valueForKey:@"gesture"];
+    int tInitial = 0;
+    NSMutableDictionary *teacherInitialDict = [teacher objectAtIndex:0];
+    NSString *teacherInitialPose = [teacherInitialDict valueForKey:@"gesture"];
     
-    NSMutableArray *superArray = [NSMutableArray arrayWithObjects:_currentModel,_teacher.gestureArray, nil];
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:superArray options:0 error:nil];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSASCIIStringEncoding];
-    NSString *postLength = [NSString stringWithFormat:@"%d", [jsonString length]];
+    int s = 0;
+    while ([[[student objectAtIndex:s] valueForKey:@"gesture"] isEqualToString:studentInitialPose]) {
+        s++;
+    }
+    sInitial = s;
+    int t = 0;
+    while ([[[teacher objectAtIndex:t] valueForKey:@"gesture"] isEqualToString:teacherInitialPose]) {
+        t++;
+    }
+    tInitial = t;
     
-    NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:[NSURL URLWithString:@"http://127.0.0.1:9875/gatherData"]];
-    [request setHTTPMethod:@"POST"];
-    [request setValue:postLength forHTTPHeaderField:@"Content-Length"];
-    [request setHTTPBody:jsonData];
-    NSOperationQueue *queue = [[NSOperationQueue alloc] init];
-    [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
-        NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-        double d = [string doubleValue];
-        [self displayPercentage:d];
-    }];
+    int startIndex;
+    if (sInitial >= tInitial) {
+        sInitial = sInitial - tInitial;
+        tInitial = 0;
+        startIndex = sInitial;
+    } else {
+        tInitial = tInitial - sInitial;
+        sInitial = 0;
+        startIndex = tInitial;
+    }
+    int endIndex = MIN([student count] - 1, [teacher count] - 1);
+    int range = endIndex - startIndex;
+    
+    int numOfMismatch = 0;
+    double sumOfErrors = 0.0;
+    for (s = sInitial, t = tInitial; s < [student count] && t < [teacher count]; s++, t++) {
+        if (![[[student objectAtIndex:s] valueForKey:@"gesture"] isEqualToString:[[teacher objectAtIndex:t] valueForKey:@"gesture"]]) {
+            numOfMismatch++;
+        } else {
+            NSMutableDictionary *sDict = [student objectAtIndex:s];
+            NSMutableDictionary *tDict = [teacher objectAtIndex:t];
+            double pitchS = [[sDict valueForKey:@"pitch"] doubleValue];
+            double pitchT = [[tDict valueForKey:@"pitch"] doubleValue];
+            double pitchE = ABS(pitchS - pitchT)/ABS(pitchT);
+            double rollS = [[sDict valueForKey:@"roll"] doubleValue];
+            double rollT = [[tDict valueForKey:@"roll"] doubleValue];
+            double rollE = ABS(rollS - rollT)/ABS(rollT);
+            double yawS = [[sDict valueForKey:@"yaw"] doubleValue];
+            double yawT = [[tDict valueForKey:@"yaw"] doubleValue];
+            double yawE = ABS(yawS - yawT)/ABS(yawT);
+            double aXS = [[sDict valueForKey:@"accelerationX"] doubleValue];
+            double aXT = [[tDict valueForKey:@"accelerationX"] doubleValue];
+            double aXE = ABS(aXS - aXT)/ABS(aXT);
+            double aYS = [[sDict valueForKey:@"accelerationY"] doubleValue];
+            double aYT = [[tDict valueForKey:@"accelerationY"] doubleValue];
+            double aYE = ABS(aYS - aYT)/ABS(aYT);
+            double aZS = [[sDict valueForKey:@"accelerationZ"] doubleValue];
+            double aZT = [[tDict valueForKey:@"accelerationZ"] doubleValue];
+            double aZE = ABS(aZS - aZT)/ABS(aZT);
+            
+            double averageErrorForThisTimeStamp = (pitchE + rollE + yawE + aXE + aYE + aZE)/6.0;
+            
+            sumOfErrors += averageErrorForThisTimeStamp;
+        }
+    }
+    double totalAccuracy = 100.0 - ABS(100.0 * sumOfErrors/range) - ABS(100.0/range * numOfMismatch);
+    if (totalAccuracy <= 0) {
+        return 0.0;
+    }
+    return totalAccuracy;
+    
 }
 
 -(void) displayPercentage:(double) percent {
     _percentError.hidden = FALSE;
-    _percentError.text = [NSString stringWithFormat:@"%.2f", percent];
+    _percentError.text = [NSString stringWithFormat:@"%.1f%%", percent];
 }
 
 -(IBAction) close {

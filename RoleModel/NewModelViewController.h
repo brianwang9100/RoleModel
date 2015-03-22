@@ -21,11 +21,14 @@
 @property (weak, nonatomic) id <NewModelViewControllerDelegate> delegate;
 
 @property (strong, nonatomic) IBOutlet UIButton *connectButton;
-@property (strong, nonatomic) IBOutlet UILabel *recordLabel;
+@property (strong, nonatomic) IBOutlet UIButton *recordButton;
 @property (strong, nonatomic) IBOutlet UIButton *saveButton;
 
 @property (strong, nonatomic) IBOutlet UILabel *syncAndLockLabel;
 @property (strong, nonatomic) IBOutlet UILabel *sampleSizeLabel;
+
+
+@property (strong, nonatomic) IBOutlet UIImageView *imageView;
 
 
 

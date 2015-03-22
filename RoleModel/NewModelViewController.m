@@ -26,18 +26,15 @@ static int MAX_MODELS = 1;
     double _aX;
     double _aY;
     double _aZ;
-
+    
+    TLMMyo *_myo;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    _recordLabel.text = @"";
     _syncAndLockLabel.text = @"";
-    
     _recording = false;
-
-    
     _modelHolder = [[NSMutableArray alloc] initWithCapacity:5];
     
     // Data notifications are received through NSNotificationCenter.
@@ -96,8 +93,10 @@ static int MAX_MODELS = 1;
 
 - (void)didConnectDevice:(NSNotification *)notification {
     _connectButton.hidden = TRUE;
-    _recordLabel.hidden = FALSE;
-    _recordLabel.text = @"Myo not Synced";
+    _recordButton.hidden = FALSE;
+    
+    [_recordButton addTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
+    
     _sampleSizeLabel.hidden = FALSE;
     _syncAndLockLabel.text = @"Perform Sync Gesture";
 
@@ -106,52 +105,73 @@ static int MAX_MODELS = 1;
 
 - (void)didDisconnectDevice:(NSNotification *)notification {
     _connectButton.hidden = FALSE;
-    _recordLabel.hidden = TRUE;
-    _recordLabel.text = @"";
+    _recordButton.hidden = TRUE;
     _sampleSizeLabel.hidden = TRUE;
     _syncAndLockLabel.text = @"";
-
+    
 }
+
 
 - (void)didUnlockDevice:(NSNotification *)notification {
     _syncAndLockLabel.text = @"Unlocked";
+}
+
+-(void) startRecording {
+    
     if ([_modelHolder count] >= MAX_MODELS) {
-        _recordLabel.text = @"Max number of samples reached";
+        [_recordButton setTitle:@"Maxed!" forState:UIControlStateNormal];
+        [_recordButton setTitle:@"Maxed!" forState:UIControlStateSelected];
+        [_recordButton setTitle:@"Maxed!" forState:UIControlStateDisabled];
     } else {
-        _recordLabel.text = @"Recording!";
-        _recording = true;
         _initialDate = [NSDate date];
         _currentModel = [NSMutableArray arrayWithCapacity:300];
+        _recording = TRUE;
+        _recordButton.selected = TRUE;
+        [_recordButton setTitle:@"Recording!" forState:UIControlStateNormal];
+        [_recordButton setTitle:@"Recording!" forState:UIControlStateSelected];
+        [_recordButton setTitle:@"Recording!" forState:UIControlStateDisabled];
+        [_recordButton removeTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
+        [_recordButton addTarget:self action:@selector(endRecording) forControlEvents:UIControlEventTouchUpInside];
+        _syncAndLockLabel.text = @"Unlocked";
+        
+        [_myo unlockWithType:TLMUnlockTypeHold];
     }
 }
 
-- (void)didLockDevice:(NSNotification *)notification {
-    _syncAndLockLabel.text = @"Locked";
-    _recordLabel.text = @"Recording Stopped";
-    _recording = false;
+-(void) endRecording {
+    
     if ([_modelHolder count] < MAX_MODELS) {
         [_modelHolder addObject:_currentModel];
-
+        
     }
-    if ([_modelHolder count] >= MAX_MODELS) {
-        _recordLabel.text = @"Max number of samples reached";
-        _saveButton.hidden = FALSE;
-    }
+    _recording = FALSE;
     
+    _recordButton.selected = FALSE;
+    [_recordButton setTitle:@"Record Again?" forState:UIControlStateNormal];
+    [_recordButton setTitle:@"Record Again?" forState:UIControlStateSelected];
+    [_recordButton setTitle:@"Record Again?" forState:UIControlStateDisabled];
+    [_recordButton removeTarget:self action:@selector(endRecording) forControlEvents:UIControlEventTouchUpInside];
+    [_recordButton addTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
+    _saveButton.hidden = FALSE;
     _sampleSizeLabel.text = [NSString stringWithFormat:@"Sample Size: %i", [_modelHolder count]];
+    _syncAndLockLabel.text = @"Locked";
+    [_myo lock];
+}
 
+- (void)didLockDevice:(NSNotification *)notification {
+
+    
+    _syncAndLockLabel.text = @"Locked";
 
 }
 
 - (void)didSyncArm:(NSNotification *)notification {
     // Retrieve the arm event from the notification's userInfo with the kTLMKeyArmSyncEvent key.
-    _recordLabel.text = @"Unlock myo to begin recording";
     _syncAndLockLabel.text = @"Locked";
 
 }
 
 - (void)didUnsyncArm:(NSNotification *)notification {
-    _recordLabel.text = @"Myo not Synced";
     _syncAndLockLabel.text = @"Perform Sync Gesture";
 }
 
@@ -166,17 +186,17 @@ static int MAX_MODELS = 1;
     
     TLMPose *pose = notification.userInfo[kTLMKeyPose];
     // Unlock the Myo whenever we receive a pose
-    if (pose.type == TLMPoseTypeUnknown || pose.type == TLMPoseTypeRest) {
+//    if (pose.type == TLMPoseTypeUnknown || pose.type == TLMPoseTypeRest) {
         // Causes the Myo to lock after a short period.
-        [pose.myo unlockWithType:TLMUnlockTypeTimed];
-    } else {
+//        [pose.myo unlockWithType:TLMUnlockTypeTimed];
+//    } else {
         // Keeps the Myo unlocked until specified.
         // This is required to keep Myo unlocked while holding a pose, but if a pose is not being held, use
         // TLMUnlockTypeTimed to restart the timer.
         [pose.myo unlockWithType:TLMUnlockTypeHold];
         // Indicates that a user action has been performed.
         [pose.myo indicateUserAction];
-    }
+//    }
 }
 
 - (void)didReceiveAccelerometerEvent:(NSNotification *)notification {
@@ -185,12 +205,14 @@ static int MAX_MODELS = 1;
     int index = (int)(executionTime/.01);
     NSLog(@"%d", index);
     
+    TLMAccelerometerEvent *accelerometerEvent = notification.userInfo[kTLMKeyAccelerometerEvent];
+    TLMOrientationEvent *orientationEvent = accelerometerEvent.myo.orientation;
+    TLMPose* pose = accelerometerEvent.myo.pose;
+    _myo = accelerometerEvent.myo;
+    
     if (_recording && index < 299) {
     
         // Retrieve the accelerometer event from the NSNotification's userInfo with the kTLMKeyAccelerometerEvent.
-        TLMAccelerometerEvent *accelerometerEvent = notification.userInfo[kTLMKeyAccelerometerEvent];
-        TLMOrientationEvent *orientationEvent = accelerometerEvent.myo.orientation;
-        TLMPose* pose = accelerometerEvent.myo.pose;
         
         TLMVector3 accelerationVector = accelerometerEvent.vector;
         TLMEulerAngles *angles = [TLMEulerAngles anglesWithQuaternion:orientationEvent.quaternion];
@@ -206,7 +228,7 @@ static int MAX_MODELS = 1;
         
         _aX = accelerationVector.x;
         _aY = accelerationVector.y;
-        _aX = accelerationVector.z;
+        _aZ = accelerationVector.z;
 
         
         switch (pose.type) {
@@ -235,7 +257,7 @@ static int MAX_MODELS = 1;
         
         if (index >= 299) {
             _recording = FALSE;
-            _recordLabel.text = @"Time Limit Reached";
+            _recordButton.titleLabel.text = @"Time Limit Reached";
             [pose.myo lock];
         } else {
             [self addGestureTimeStamp];

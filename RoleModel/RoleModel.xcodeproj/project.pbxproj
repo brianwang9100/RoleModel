@@ -15,6 +15,10 @@
 		DFAE7D201ABD7AD200602EF8 /* CoreBluetooth.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAE7D1F1ABD7AD200602EF8 /* CoreBluetooth.framework */; };
 		DFAE7D221ABD7ADE00602EF8 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DFAE7D211ABD7ADE00602EF8 /* SystemConfiguration.framework */; };
 		DFAE7D2C1ABDE95800602EF8 /* RoleModelSplash.png in Resources */ = {isa = PBXBuildFile; fileRef = DFAE7D2B1ABDE95800602EF8 /* RoleModelSplash.png */; };
+		DFAE7D3D1ABE83B100602EF8 /* Buttonred_clip_art_hight.png in Resources */ = {isa = PBXBuildFile; fileRef = DFAE7D3C1ABE83B100602EF8 /* Buttonred_clip_art_hight.png */; };
+		DFAE7D3F1ABE83B700602EF8 /* Buttongreen_clip_art_hight.png in Resources */ = {isa = PBXBuildFile; fileRef = DFAE7D3E1ABE83B700602EF8 /* Buttongreen_clip_art_hight.png */; };
+		DFAE7D491ABE94B900602EF8 /* RoleModelBackground2.png in Resources */ = {isa = PBXBuildFile; fileRef = DFAE7D481ABE94B900602EF8 /* RoleModelBackground2.png */; };
+		DFAE7D4B1ABE94C100602EF8 /* RoleModelBackground.png in Resources */ = {isa = PBXBuildFile; fileRef = DFAE7D4A1ABE94C100602EF8 /* RoleModelBackground.png */; };
 		DFBB49FE1ABD39C4005380D4 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB49FD1ABD39C4005380D4 /* main.m */; };
 		DFBB4A011ABD39C4005380D4 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB4A001ABD39C4005380D4 /* AppDelegate.m */; };
 		DFBB4A041ABD39C4005380D4 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = DFBB4A031ABD39C4005380D4 /* ViewController.m */; };
@@ -47,6 +51,10 @@
 		DFAE7D1F1ABD7AD200602EF8 /* CoreBluetooth.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreBluetooth.framework; path = System/Library/Frameworks/CoreBluetooth.framework; sourceTree = SDKROOT; };
 		DFAE7D211ABD7ADE00602EF8 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		DFAE7D2B1ABDE95800602EF8 /* RoleModelSplash.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoleModelSplash.png; sourceTree = "<group>"; };
+		DFAE7D3C1ABE83B100602EF8 /* Buttonred_clip_art_hight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Buttonred_clip_art_hight.png; sourceTree = "<group>"; };
+		DFAE7D3E1ABE83B700602EF8 /* Buttongreen_clip_art_hight.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Buttongreen_clip_art_hight.png; sourceTree = "<group>"; };
+		DFAE7D481ABE94B900602EF8 /* RoleModelBackground2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoleModelBackground2.png; sourceTree = "<group>"; };
+		DFAE7D4A1ABE94C100602EF8 /* RoleModelBackground.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = RoleModelBackground.png; sourceTree = "<group>"; };
 		DFBB49F81ABD39C4005380D4 /* RoleModel.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RoleModel.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DFBB49FC1ABD39C4005380D4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DFBB49FD1ABD39C4005380D4 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -86,7 +94,11 @@
 		DFBB49EF1ABD39C4005380D4 = {
 			isa = PBXGroup;
 			children = (
+				DFAE7D3C1ABE83B100602EF8 /* Buttonred_clip_art_hight.png */,
 				DFAE7D2B1ABDE95800602EF8 /* RoleModelSplash.png */,
+				DFAE7D481ABE94B900602EF8 /* RoleModelBackground2.png */,
+				DFAE7D4A1ABE94C100602EF8 /* RoleModelBackground.png */,
+				DFAE7D3E1ABE83B700602EF8 /* Buttongreen_clip_art_hight.png */,
 				DFAE7D211ABD7ADE00602EF8 /* SystemConfiguration.framework */,
 				DFAE7D1F1ABD7AD200602EF8 /* CoreBluetooth.framework */,
 				DFAE7D1D1ABD7AA900602EF8 /* MyoKit.framework */,
@@ -235,7 +247,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				DFAE7D2C1ABDE95800602EF8 /* RoleModelSplash.png in Resources */,
+				DFAE7D491ABE94B900602EF8 /* RoleModelBackground2.png in Resources */,
+				DFAE7D3D1ABE83B100602EF8 /* Buttonred_clip_art_hight.png in Resources */,
+				DFAE7D3F1ABE83B700602EF8 /* Buttongreen_clip_art_hight.png in Resources */,
 				DFBB4A071ABD39C4005380D4 /* Main.storyboard in Resources */,
+				DFAE7D4B1ABE94C100602EF8 /* RoleModelBackground.png in Resources */,
 				DFBB4A0C1ABD39C4005380D4 /* LaunchScreen.xib in Resources */,
 				DFBB4A091ABD39C4005380D4 /* Images.xcassets in Resources */,
 			);
