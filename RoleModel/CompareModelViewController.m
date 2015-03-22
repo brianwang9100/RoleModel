@@ -246,11 +246,9 @@
     [request setHTTPBody:jsonData];
     NSOperationQueue *queue = [[NSOperationQueue alloc] init];
     [NSURLConnection sendAsynchronousRequest:request queue:queue completionHandler:^(NSURLResponse *response, NSData *data, NSError *error){
-//        double d = 0;
-//        memcpy(&d, [data bytes], sizeof(d));
-//        NSLog(@"%.2f", d);
-//        [self displayPercentage: d];
-        
+        NSString *string = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+        double d = [string doubleValue];
+        [self displayPercentage:d];
     }];
 }
 
