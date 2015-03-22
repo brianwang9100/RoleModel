@@ -8,6 +8,7 @@
 
 #import "NewModelViewController.h"
 #import <MyoKit/MyoKit.h>
+#import "ModelGraphViewController.h"
 static int MAX_MODELS = 1;
 @interface NewModelViewController ()
 
@@ -309,6 +310,8 @@ static int MAX_MODELS = 1;
 -(IBAction) close {
     [self.delegate newModelViewControllerDidClose:self];
 }
+
+
 
 
 

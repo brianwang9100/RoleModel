@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 #import <MyoKit/MyoKit.h>
 #import "Model.h"
+#import "ModelGraphViewController.h"
 
 @class NewModelViewController;
 

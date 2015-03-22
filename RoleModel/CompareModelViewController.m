@@ -8,6 +8,7 @@
 
 #import "CompareModelViewController.h"
 #import <MyoKit/MyoKit.h>
+#import "ModelGraphViewController.h"
 @interface CompareModelViewController ()
 
 @end
@@ -32,6 +33,15 @@
     _syncAndLockLabel.text = @"";
     
     _recording = false;
+    
+    _rollEarray = [NSMutableArray array];
+    _pitchEarray = [NSMutableArray array];
+    _yawEarray = [NSMutableArray array];
+    
+    _aXEarray = [NSMutableArray array];
+    _aYEarray = [NSMutableArray array];
+    _aZEarray = [NSMutableArray array];
+    
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -126,6 +136,8 @@
     [_recordButton addTarget:self action:@selector(endRecording) forControlEvents:UIControlEventTouchUpInside];
     _percentError.hidden = TRUE;
     _syncAndLockLabel.text = @"Unlocked";
+    _compareButton.hidden = TRUE;
+    _graphButton.hidden = TRUE;
     
     [_myo unlockWithType:TLMUnlockTypeHold];
 }
@@ -141,6 +153,8 @@
     [_recordButton removeTarget:self action:@selector(endRecording) forControlEvents:UIControlEventTouchUpInside];
     [_recordButton addTarget:self action:@selector(startRecording) forControlEvents:UIControlEventTouchUpInside];
     _compareButton.hidden = FALSE;
+    _graphButton.hidden = FALSE;
+    
     _syncAndLockLabel.text = @"Locked";
     [_myo lock];
 }
@@ -330,6 +344,15 @@
             double aZT = [[tDict valueForKey:@"accelerationZ"] doubleValue];
             double aZE = ABS(aZS - aZT)/ABS(aZT);
             
+            [_pitchEarray addObject:[NSNumber numberWithDouble: pitchE]];
+            [_rollEarray addObject:[NSNumber numberWithDouble: rollE]];
+            [_yawEarray addObject:[NSNumber numberWithDouble: yawE]];
+            
+            [_aXEarray addObject:[NSNumber numberWithDouble: aXE]];
+            [_aYEarray addObject:[NSNumber numberWithDouble: aYE]];
+            [_aZEarray addObject:[NSNumber numberWithDouble: aZE]];
+
+            
             double averageErrorForThisTimeStamp = (pitchE + rollE + yawE + aXE + aYE + aZE)/6.0;
             
             sumOfErrors += averageErrorForThisTimeStamp;
@@ -370,4 +393,26 @@
 }
 */
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    if ([segue.identifier isEqualToString:@"graphView"]) {
+        
+        UINavigationController *navigationController = segue.destinationViewController;
+        ModelGraphViewController *modelGraphViewController = [navigationController viewControllers][0];
+        modelGraphViewController.delegate = self;
+        
+        modelGraphViewController.pitchE = _pitchEarray;
+        modelGraphViewController.rollE = _rollEarray;
+        modelGraphViewController.yawE = _yawEarray;
+        
+        modelGraphViewController.aXE = _aXEarray;
+        modelGraphViewController.aYE = _aYEarray;
+        modelGraphViewController.aZE = _aZEarray;
+
+    }
+}
+
+- (void)modelGraphViewControllerDidClose:(ModelGraphViewController *)controller
+{
+    [self dismissViewControllerAnimated:YES completion:nil];
+}
 @end

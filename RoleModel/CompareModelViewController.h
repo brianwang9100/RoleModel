@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <MyoKit/MyoKit.h>
+#import "ModelGraphViewController.h"
 #import "Model.h"
 
 @class CompareModelViewController;
@@ -16,7 +17,7 @@
 -(void) compareModelViewControllerDidClose:(CompareModelViewController *) controller;
 @end
 
-@interface CompareModelViewController : UIViewController
+@interface CompareModelViewController : UIViewController<ModelGraphViewControllerDelegate>
 
 
 @property (weak, nonatomic) id <CompareModelViewControllerDelegate> delegate;
@@ -32,6 +33,19 @@
 
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 
+@property (strong, nonatomic) IBOutlet UIButton *graphButton;
+
+
+@property (strong, nonatomic) NSMutableArray *rollEarray;
+@property (strong, nonatomic) NSMutableArray *pitchEarray;
+@property (strong, nonatomic) NSMutableArray *yawEarray;
+
+@property (strong, nonatomic) NSMutableArray *aXEarray;
+@property (strong, nonatomic) NSMutableArray *aYEarray;
+@property (strong, nonatomic) NSMutableArray *aZEarray;
+
+@property (strong, nonatomic) NSMutableArray *studentGesturesArray;
+@property (strong, nonatomic) NSMutableArray *teacherGesturesArray;
 
 -(IBAction) compare;
 -(IBAction) close;
