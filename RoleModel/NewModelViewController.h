@@ -32,8 +32,6 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imageView;
 
 
-
-
 -(IBAction) close;
 
 @end

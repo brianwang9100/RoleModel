@@ -294,10 +294,26 @@ static int MAX_MODELS = 1;
 #pragma mark - IBActions
 
 -(IBAction) save {
-    Model* temp = [[Model alloc] initWithName:@"LOL" gestureArray:[_modelHolder objectAtIndex:0]];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enter Name" message:@"" delegate:self cancelButtonTitle:@"Cancel" otherButtonTitles:@"Okay", nil];
+    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
     
-    [self.delegate addModel: temp];
-    [self.delegate newModelViewControllerDidClose:self];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    UITextField *textfield =  [alertView textFieldAtIndex: 0];
+    NSString *nameOfModel = textfield.text;
+    Model *model;
+    switch(buttonIndex) {
+        case 0:
+            break;
+        case 1:
+            model = [[Model alloc] initWithName:nameOfModel gestureArray:[_modelHolder objectAtIndex:0]];
+            [self.delegate addModel: model];
+            [self.delegate newModelViewControllerDidClose:self];
+            break;
+    }
 }
 
 -(IBAction) connectToMyo {
